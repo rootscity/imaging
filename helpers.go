@@ -56,17 +56,6 @@ var (
 	ErrUnsupportedFormat = errors.New("imaging: unsupported image format")
 )
 
-// Decode reads an image from r.
-func Decode(r io.Reader) (image.Image, error) {
-	fmt.Println("Decode before")
-	img, _, err := image.Decode(r)
-	fmt.Println("Decode after", err)
-	if err != nil {
-		return nil, err
-	}
-	return toNRGBA(img), nil
-}
-
 // Open loads an image from file
 func Open(filename string) (image.Image, error) {
 	file, err := os.Open(filename)
