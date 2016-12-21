@@ -7,7 +7,7 @@ import (
 	"sync/atomic"
 )
 
-var parallelizationEnabled = true
+var parallelizationEnabled = false
 
 // if GOMAXPROCS = 1: no goroutines used
 // if GOMAXPROCS > 1: spawn N=GOMAXPROCS workers in separate goroutines
