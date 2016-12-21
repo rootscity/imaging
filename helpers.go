@@ -23,6 +23,7 @@ import (
 	"golang.org/x/image/bmp"
 	"golang.org/x/image/tiff"
 	"fmt"
+	"runtime"
 )
 
 type Format int
@@ -159,13 +160,19 @@ func New(width, height int, fillColor color.Color) *image.NRGBA {
 
 // Clone returns a copy of the given image.
 func Clone(img image.Image) *image.NRGBA {
+	fmt.Println("Clone top")
 	srcBounds := img.Bounds()
 	srcMinX := srcBounds.Min.X
 	srcMinY := srcBounds.Min.Y
+	fmt.Println("Clone bounds ", srcMinX, " ", srcMinY)
 
 	dstBounds := srcBounds.Sub(srcBounds.Min)
 	dstW := dstBounds.Dx()
 	dstH := dstBounds.Dy()
+	fmt.Println("Clone size ", dstW, " ", dstH)
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+	fmt.Println("Mem stats ", m.Alloc / 1024, " ", m.Sys / 1024)
 	dst := image.NewNRGBA(dstBounds)
 	fmt.Println("Clone before")
 	switch src := img.(type) {
