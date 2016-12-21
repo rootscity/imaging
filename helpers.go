@@ -22,6 +22,7 @@ import (
 
 	"golang.org/x/image/bmp"
 	"golang.org/x/image/tiff"
+	"fmt"
 )
 
 type Format int
@@ -57,7 +58,9 @@ var (
 
 // Decode reads an image from r.
 func Decode(r io.Reader) (image.Image, error) {
+	fmt.Println("Decode before")
 	img, _, err := image.Decode(r)
+	fmt.Println("Decode after", err)
 	if err != nil {
 		return nil, err
 	}
@@ -175,10 +178,11 @@ func Clone(img image.Image) *image.NRGBA {
 	dstW := dstBounds.Dx()
 	dstH := dstBounds.Dy()
 	dst := image.NewNRGBA(dstBounds)
-
+	fmt.Println("Clone before")
 	switch src := img.(type) {
 
 	case *image.NRGBA:
+		fmt.Println("Clone NRGBA")
 		rowSize := srcBounds.Dx() * 4
 		parallel(dstH, func(partStart, partEnd int) {
 			for dstY := partStart; dstY < partEnd; dstY++ {
@@ -189,6 +193,7 @@ func Clone(img image.Image) *image.NRGBA {
 		})
 
 	case *image.NRGBA64:
+		fmt.Println("Clone NRGBA64")
 		parallel(dstH, func(partStart, partEnd int) {
 			for dstY := partStart; dstY < partEnd; dstY++ {
 				di := dst.PixOffset(0, dstY)
@@ -208,6 +213,7 @@ func Clone(img image.Image) *image.NRGBA {
 		})
 
 	case *image.RGBA:
+		fmt.Println("Clone RGBA")
 		parallel(dstH, func(partStart, partEnd int) {
 			for dstY := partStart; dstY < partEnd; dstY++ {
 				di := dst.PixOffset(0, dstY)
@@ -243,6 +249,7 @@ func Clone(img image.Image) *image.NRGBA {
 		})
 
 	case *image.RGBA64:
+		fmt.Println("Clone RGBA64")
 		parallel(dstH, func(partStart, partEnd int) {
 			for dstY := partStart; dstY < partEnd; dstY++ {
 				di := dst.PixOffset(0, dstY)
@@ -278,6 +285,7 @@ func Clone(img image.Image) *image.NRGBA {
 		})
 
 	case *image.Gray:
+		fmt.Println("Clone Gray")
 		parallel(dstH, func(partStart, partEnd int) {
 			for dstY := partStart; dstY < partEnd; dstY++ {
 				di := dst.PixOffset(0, dstY)
@@ -298,6 +306,7 @@ func Clone(img image.Image) *image.NRGBA {
 		})
 
 	case *image.Gray16:
+		fmt.Println("Clone Gray16")
 		parallel(dstH, func(partStart, partEnd int) {
 			for dstY := partStart; dstY < partEnd; dstY++ {
 				di := dst.PixOffset(0, dstY)
@@ -318,6 +327,7 @@ func Clone(img image.Image) *image.NRGBA {
 		})
 
 	case *image.YCbCr:
+		fmt.Println("Clone YCbCr")
 		parallel(dstH, func(partStart, partEnd int) {
 			for dstY := partStart; dstY < partEnd; dstY++ {
 				di := dst.PixOffset(0, dstY)
@@ -340,6 +350,7 @@ func Clone(img image.Image) *image.NRGBA {
 		})
 
 	case *image.Paletted:
+		fmt.Println("Clone Paletted")
 		plen := len(src.Palette)
 		pnew := make([]color.NRGBA, plen)
 		for i := 0; i < plen; i++ {
@@ -366,6 +377,7 @@ func Clone(img image.Image) *image.NRGBA {
 		})
 
 	default:
+		fmt.Println("Clone default")
 		parallel(dstH, func(partStart, partEnd int) {
 			for dstY := partStart; dstY < partEnd; dstY++ {
 				di := dst.PixOffset(0, dstY)
@@ -385,16 +397,19 @@ func Clone(img image.Image) *image.NRGBA {
 
 	}
 
+	fmt.Println("Clone after")
 	return dst
 }
 
 // This function used internally to convert any image type to NRGBA if needed.
 func toNRGBA(img image.Image) *image.NRGBA {
+	fmt.Println("toNRGBA before")
 	srcBounds := img.Bounds()
 	if srcBounds.Min.X == 0 && srcBounds.Min.Y == 0 {
 		if src0, ok := img.(*image.NRGBA); ok {
 			return src0
 		}
 	}
+	fmt.Println("toNRGBA before clone")
 	return Clone(img)
 }

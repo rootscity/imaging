@@ -1,0 +1,10 @@
+hash: ffe451594d56d03ebe1736d7b6cd8cb34503d98f4960fdb7ad9c250b5fd6ac63
+updated: 2016-12-21T12:06:30.295384739-07:00
+imports:
+- name: golang.org/x/image
+  version: f1b1ff53e10e288d0ab6f161067c0a69b72cee28
+  subpackages:
+  - bmp
+  - tiff
+  - tiff/lzw
+devImports: []

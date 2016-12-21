@@ -1,0 +1,6 @@
+package: github.com/rootscity/imaging
+import:
+- package: golang.org/x/image
+  subpackages:
+  - bmp
+  - tiff
