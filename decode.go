@@ -15,9 +15,9 @@ import (
 
 // Decode reads an image from r.
 func Decode(r io.Reader) (image.Image, error) {
-	fmt.Println("Decode before")
+	fmt.Println("Decode before2")
 	img, _, err := decode(r)
-	fmt.Println("Decode after", err)
+	fmt.Println("Decode after2", err)
 	if err != nil {
 		return nil, err
 	}
@@ -103,11 +103,15 @@ func sniff(r reader) format {
 // Format registration is typically done by an init function in the codec-
 // specific package.
 func decode(r io.Reader) (image.Image, string, error) {
+	fmt.Println("decode before asReader")
 	rr := asReader(r)
+	fmt.Println("decode before sniff")
 	f := sniff(rr)
 	if f.decode == nil {
 		return nil, "", image.ErrFormat
 	}
+	fmt.Println("decode before decode ", f.name, f.magic)
 	m, err := f.decode(rr)
+	fmt.Println("decode after decode")
 	return m, f.name, err
 }
